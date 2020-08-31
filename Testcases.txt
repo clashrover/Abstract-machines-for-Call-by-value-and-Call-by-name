@@ -1,0 +1,55 @@
+A5 Test cases
+
+let x = [("+",2);("1",0);("2",0);("abs",1)];;
+let r6 = Node("+",[Node("abs",[V "e"]);Node("abs",[V "z"])]);;
+let r7 = Node("+",[Node("abs",[Node("abs",[V "e"])]);Node("abs",[V "e"])]);;
+let a = Node("+",[Node("+",[V "x";V "y"]);Node("+",[V "z";Node("+",[V "z";Node("2",[])])])]);;
+let b = Node("+",[Node("+",[V "y";Node("1",[])]);Node("+",[V "z";Node("+",[Node("+",[V "x";V "y"]);Node("2",[])])])]);;
+let p t = match t with
+         V "x" -> V "y" |
+         V "y" -> V "z" |
+          _ -> t;; 
+a) check_sig x;;
+b) wfterm x r6;;
+c) ht r7;;
+d) size r6;;
+e) vars r7;;
+f) let z = mgu(a,b);;
+g) subst z a;;
+
+
+A6 Test cases
+
+let f1 = Ru((Node("edge",[Node("1",[]);Node("2",[])])),([]));;
+let f2 = Ru((Node("edge",[Node("2",[]);Node("3",[])])),([]));;
+let f3 = Ru((Node("edge",[Node("3",[]);Node("4",[])])),([]));;
+let f4 = Ru((Node("edge",[Node("3",[]);Node("5",[])])),([]));;
+let f5 = Ru((Node("path",[V("x");V("x")])),([]));;
+let r1 = Ru((Node("path",[V("x");V("y")])),([Node("edge",[V("x");V("z")]);Node("path",[V("z");V("y")])]));;
+
+let p1 = Cl([f1;f2;f3;f4;f5;r1]);;
+
+let g1 = ([Node("path",[V "a";V "b"])]);;
+
+a) execute g1 p1;;
+
+
+A7 test cases
+
+a) hastype([(var(y),boolT),(var(x),intT)],clt(var(x),23),W).
+b) hastype([(var(y),boolT),(var(x),intT)],tup([true,false,23,var(y),var(x)]),W).
+c) typeElaborates([], seq(def(var(y), 23), def(var(x), true)), W).
+
+
+A8 test cases
+
+let a = Add(N 2, N 7);;
+let aa = compile a;;
+let aaa = execute ([], [], aa, []);;
+kriv [] a;;
+
+
+let t12 = Fun(Lambda(V "x", N 3), Div(N 1, N 0));;
+let c12 = compile t12;;
+execute ([], [], c12, []);;
+kriv [] t12;;	

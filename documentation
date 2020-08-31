@@ -1,0 +1,36 @@
+Assignment 8
+Sagar Sharma
+2018CS10378
+
+
+Krivine Machine -> Call by name semantics
+
+1. 	for environment y Lambda(x,e) we pop an answer 'a' from stack and evaluate e with new environment y' given by (x,a)::y  
+2. 	for environment y Funcall(e1, e2) forms a new closure (y,e2) and pushes it onto stack. Then e2 is evaluated with new stack
+3. 	for environment y V(x) looks up for answer corresponding to x which may be a closure or simple int. If it is a closure then
+	this closure is further evaluated to give answer.
+
+Rest all are simple and easy to understand.
+
+
+SECD Machine    -> Call by value semantics
+
+first we form compile function, that converts expression into opcode list
+This opcode list serves as control for stack machine
+
+rules :
+let rec evaluate (y:env) (c: opcode list) (s:stack) (d: triple) : ans =
+	match (y,c,s,d) with
+	1. (y, CLOSURE(x,c1)::c2 , s, d) -> evaluate y c2 (Cl(y,x,c1)::s) d            
+
+	2. (y, FUNCALL::c1, (x::Cl(y1, x1, c2)::s1) , d) ->  evaluate ((x1,x)::y1) c2 [] ((s1,y,c1)::d)   
+	
+	3. (y, RETURN::c1 , (x::s'), (s1,y1,c2)::d)	-> evaluate y1 c2 (x::s1) d    
+;;
+
+I will explain this in terms of a Funcall(e1,e2)
+when it is compiled we get compile e1 @ compile e2 @ [FUNCALL] . when we start working on this opcode list as
+e1 is a lambda abstraction hence we go to rule 1. and insert a Value closer to stack and go on to evaluate rest of opcode list
+meaning we insert closer to stack and start evaluating the argument. When it is complete we get to rule 2 using which we save the 
+current stack, remaining opcode list, current environment in dump. And start evaluating abstraction with fromal parameter 
+binded to argument. When we reach return we restore the call time environment.
